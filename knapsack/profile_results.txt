@@ -1,0 +1,89 @@
+tuple
+
+File: solver.py
+Function: solve_bb at line 207
+Total time: 1.26291 s
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   207                                           @profile
+   208                                           def solve_bb(item_count, capacity, ordered_items, taken):
+   209                                               #not going to fill the list as we go, clear it
+   210        31          162      5.2      0.0      while len(taken) != 0:
+   211        30          162      5.4      0.0          del taken[0]
+   212
+   213         1        29500  29500.0      0.9      print ordered_items
+   214         1          127    127.0      0.0      items = sorted(ordered_items, key = lambda x: x.value_density)
+   215         1            8      8.0      0.0      items.reverse()
+   216         1        23687  23687.0      0.7      print items
+   217
+   218                                               #first run greedy algorithm to get a baseline best score.
+   219         1            8      8.0      0.0      room_to_go = capacity
+   220         1            6      6.0      0.0      initial_score = 0
+   221         2           13      6.5      0.0      for item in items:
+   222         2           17      8.5      0.0          if item.weight > capacity:
+   223                                                       #ignore item
+   224                                                       continue
+   225
+   226         2           14      7.0      0.0          if room_to_go - item.weight >= 0:
+   227         1            7      7.0      0.0              room_to_go -= item.weight
+   228         1            8      8.0      0.0              initial_score += item.value
+   229                                                   else:
+   230         1            6      6.0      0.0              break
+   231
+   232         1            6      6.0      0.0      best_score = initial_score
+   233
+   234         1            6      6.0      0.0      if debug:
+   235                                                   print "inital best: " + str(best_score)
+   236
+   237         1            7      7.0      0.0      nodes = []
+   238         1            5      5.0      0.0      visited_nodes = []
+   239         1            6      6.0      0.0      best_node = None
+   240         1            6      6.0      0.0      best_index = 0;
+   241         1           75     75.0      0.0      root = bb_node(0,capacity,-1,items,[])
+   242         1            6      6.0      0.0      best_node = root
+   243         1           21     21.0      0.0      vnr = EstimateNode(root.estimate, root)
+   244         1            8      8.0      0.0      nodes.append(vnr)
+   245      6406        36629      5.7      1.1      while len(nodes) > 0:
+   246                                                   #with Timer() as a:
+   247                                                   #with Timer() as t:
+   248      6405      1920164    299.8     55.6          nodes.sort(key = lambda x: x.estimate)
+   249                                                   #print "=> elapsed nodes.sort: %s s" % t.secs
+   250      6405        35490      5.5      1.0          if debug:
+   251                                                       print "size: " + str(len(nodes))
+   252      6405        44669      7.0      1.3          node = nodes.pop().node
+   253      6405        33337      5.2      1.0          if debug:
+   254                                                       node.show()
+   255      6405        36120      5.6      1.0          index = node.index + 1
+   256      6405        37008      5.8      1.1          if index < len(items):
+   257     19167       116982      6.1      3.4              for decision in range(2):
+   258                                                           #need to deep copy the decision vector
+   259     12778       233352     18.3      6.8                  dv_copy1 = copy.copy(node.decision_vector)
+   260     12778        75614      5.9      2.2                  dv_copy1.append(decision)
+   261     12778        85972      6.7      2.5                  room = node.room - items[index].weight*decision
+   262     12778        69163      5.4      2.0                  if room >= 0:
+   263      9532       391110     41.0     11.3                      child_node = bb_node(node.value + items[index].value*decision,room, index, items, dv_copy1)
+   264      9532        57429      6.0      1.7                      visited_nodes.append(child_node)
+   265      9532        53626      5.6      1.6                      if child_node.value >= best_score:
+   266                                                                   #best_score = child_node.value
+   267                                                                   #best_index = len(visited_nodes) - 1
+   268       133          697      5.2      0.0                          best_node = child_node
+   269       133          709      5.3      0.0                          best_score = best_node.value
+   270       133          701      5.3      0.0                          if debug:
+   271                                                                       print 'new best value: ' + str(best_node.value)
+   272      9532        55133      5.8      1.6                      if child_node.estimate >= best_node.value:
+   273      6404        73592     11.5      2.1                          nodes.append(EstimateNode(child_node.estimate, child_node))
+   274                                                               else:
+   275      3128        18053      5.8      0.5                          if debug:
+   276                                                                       print "pruned: estimate worse than best value"
+   277                                                           else:
+   278      3246        16925      5.2      0.5                      if debug:
+   279                                                                   print "pruned: infeasible"
+   280                                                   #print "=> elapsed loop: %s s" % t.secs
+   281
+   282         1         4012   4012.0      0.1      print 'nodes visited: ' + str(len(visited_nodes))
+   283                                               #taken.extend(visited_nodes[best_index].decision_vector)
+   284        31          245      7.9      0.0      for item in ordered_items:
+   285                                                   #taken.append(visited_nodes[best_index].decision_vector[item.index])
+   286        30          283      9.4      0.0          taken.append(best_node.decision_vector[item.index])
+   287         1            5      5.0      0.0      return best_node.value
