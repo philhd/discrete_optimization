@@ -13,7 +13,7 @@
     <Name>knapsack</Name>
     <RootNamespace>knapsack</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>../../data/ks_400_0</CommandLineArguments>
+    <CommandLineArguments>../../data/ks_19_0</CommandLineArguments>
     <InterpreterPath />
     <InterpreterArguments />
   </PropertyGroup>

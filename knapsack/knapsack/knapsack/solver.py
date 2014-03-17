@@ -3,6 +3,7 @@
 
 from collections import namedtuple
 import copy
+import heapq
 Item = namedtuple("Item", ['index', 'value', 'weight','value_density'])
 EstimateNode = namedtuple("EstimateNode", ['estimate', 'node'])
 
@@ -204,16 +205,21 @@ class bb_edge:
         self.start = None
         self.end = None
 
-@profile
+#@profile
 def solve_bb(item_count, capacity, ordered_items, taken):
     #not going to fill the list as we go, clear it
     while len(taken) != 0:
         del taken[0]
 
-    print ordered_items
+    if debug:
+        print ordered_items
     items = sorted(ordered_items, key = lambda x: x.value_density)
     items.reverse()
-    print items
+    id_to_index_map = {}
+    for i in range(len(items)):
+        id_to_index_map[items[i].index] = i
+    if debug:
+        print items
 
     #first run greedy algorithm to get a baseline best score.
     room_to_go = capacity
@@ -240,16 +246,18 @@ def solve_bb(item_count, capacity, ordered_items, taken):
     best_index = 0;
     root = bb_node(0,capacity,-1,items,[])
     best_node = root
-    vnr = EstimateNode(root.estimate, root)
-    nodes.append(vnr)
+    vnr = EstimateNode(root.estimate*-1, root)
+    #nodes.append(vnr)
+    heapq.heappush(nodes,vnr)
     while len(nodes) > 0:
         #with Timer() as a:
         #with Timer() as t:
-        nodes.sort(key = lambda x: x.estimate)
+        #nodes.sort(key = lambda x: x.estimate)
         #print "=> elapsed nodes.sort: %s s" % t.secs
         if debug:
             print "size: " + str(len(nodes))
-        node = nodes.pop().node
+        #node = nodes.pop().node
+        node = heapq.heappop(nodes).node
         if debug:
             node.show()
         index = node.index + 1
@@ -269,8 +277,9 @@ def solve_bb(item_count, capacity, ordered_items, taken):
                         best_score = best_node.value
                         if debug:
                             print 'new best value: ' + str(best_node.value)
-                    if child_node.estimate >= best_node.value:
-                        nodes.append(EstimateNode(child_node.estimate, child_node))
+                    if child_node.estimate >= best_score:
+                        #nodes.append(EstimateNode(child_node.estimate, child_node))
+                        heapq.heappush(nodes, EstimateNode(child_node.estimate*-1, child_node))
                     else:
                         if debug:
                             print "pruned: estimate worse than best value"
@@ -283,7 +292,7 @@ def solve_bb(item_count, capacity, ordered_items, taken):
     #taken.extend(visited_nodes[best_index].decision_vector)
     for item in ordered_items:
         #taken.append(visited_nodes[best_index].decision_vector[item.index])
-        taken.append(best_node.decision_vector[item.index])
+        taken.append(best_node.decision_vector[id_to_index_map[item.index]])
     return best_node.value
     #root.show()
 
@@ -311,9 +320,9 @@ def solve_it(input_data):
     taken = [0]*len(items)
 
     #value = solve_dp(item_count, capacity, items, taken)
-    with Timer() as t:
-        value = solve_bb(item_count, capacity, items, taken)
-    print "=> elapsed: %s s" % t.secs
+    #with Timer() as t:
+    value = solve_bb(item_count, capacity, items, taken)
+    #print "=> elapsed: %s s" % t.secs
 
     #################################################
 
