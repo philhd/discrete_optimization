@@ -213,8 +213,9 @@ def solve_bb(item_count, capacity, ordered_items, taken):
 
     if debug:
         print ordered_items
-    items = sorted(ordered_items, key = lambda x: x.value_density)
-    items.reverse()
+    items = ordered_items
+#    items = sorted(ordered_items, key = lambda x: x.value_density)
+#    items.reverse()
     id_to_index_map = {}
     for i in range(len(items)):
         id_to_index_map[items[i].index] = i
