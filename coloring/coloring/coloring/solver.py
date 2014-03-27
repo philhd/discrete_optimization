@@ -2,31 +2,9 @@
 # -*- coding: utf-8 -*-
 from graph import graph
 
-def solve_it(input_data):
-    # Modify this code to run your optimization algorithm
+debug = True
 
-    # parse the input
-    lines = input_data.split('\n')
-
-    first_line = lines[0].split()
-    node_count = int(first_line[0])
-    edge_count = int(first_line[1])
-
-    edges = []
-    for i in range(1, edge_count + 1):
-        line = lines[i]
-        parts = line.split()
-        edges.append((int(parts[0]), int(parts[1])))
-
-    my_graph = graph(node_count,edges)
-
-    #use a greedy coloring to get our initial configuration
-    print "violations: " + str(my_graph.get_num_violations())
-    my_graph.smart_greedy_color()
-    print "violations: " + str(my_graph.get_num_violations())
-    print "colors used: " + str(len(my_graph.colors))
-    my_graph.show_color_distribution()
-
+def local_search_1(my_graph):
     continue_search = True
 
     #now remove colors and use local search to remove violations
@@ -58,6 +36,72 @@ def solve_it(input_data):
 
         if tries_left == 0:
             continue_search = False
+
+# each iteration: removes the most used color and recolors it using a greedy coloring
+def iterated_greedy_1(my_graph, max_iterations):
+    violations = my_graph.get_num_violations()
+    iteration_count = 0
+    while violations == 0 and iteration_count < max_iterations:
+        node_order = ""
+        if debug: 
+            for node in my_graph.nodes:
+                node_order += " " + str(my_graph.nodes[node].id);
+            print "node_order:" + str(node_order)
+        if debug: my_graph.show_color_distribution()
+        if debug: print "most_used_color: " + str(my_graph.get_most_used_color())
+        my_graph.remove_color(my_graph.get_most_used_color(),None)
+        my_graph.smart_greedy_color()
+        violations = my_graph.get_num_violations()
+        if debug: print "violations: " + str(violations)
+        if debug: print "colors used: " + str(len(my_graph.colors))
+        iteration_count += 1
+
+# each iteration: re-orders nodes starting with most-used colors, and re-colors the whole graph using greed coloring
+def iterated_greedy_2(my_graph, max_iterations):
+    violations = my_graph.get_num_violations()
+    iteration_count = 0
+    while violations == 0 and iteration_count < max_iterations:
+        node_order = ""
+        if debug: 
+            for node in my_graph.nodes:
+                node_order += " " + str(my_graph.nodes[node].id);
+            print "node_order:" + str(node_order)
+        if debug: my_graph.show_color_distribution()
+        if debug: print "most_used_color: " + str(my_graph.get_most_used_color())
+        my_graph.remove_color(my_graph.get_most_used_color(),None)
+        my_graph.smart_greedy_color()
+        violations = my_graph.get_num_violations()
+        if debug: print "violations: " + str(violations)
+        if debug: print "colors used: " + str(len(my_graph.colors))
+        iteration_count += 1
+
+
+def solve_it(input_data):
+    # Modify this code to run your optimization algorithm
+
+    # parse the input
+    lines = input_data.split('\n')
+
+    first_line = lines[0].split()
+    node_count = int(first_line[0])
+    edge_count = int(first_line[1])
+
+    edges = []
+    for i in range(1, edge_count + 1):
+        line = lines[i]
+        parts = line.split()
+        edges.append((int(parts[0]), int(parts[1])))
+
+    my_graph = graph(node_count,edges)
+
+    #use a greedy coloring to get our initial configuration
+    if debug: print "violations: " + str(my_graph.get_num_violations())
+    my_graph.smart_greedy_color()
+    if debug: print "violations: " + str(my_graph.get_num_violations())
+    if debug: print "colors used: " + str(len(my_graph.colors))
+
+    #iterated_greedy_1(my_graph, 100)
+
 
     # build a trivial solution
     # every node has its own color

@@ -1,3 +1,5 @@
+from sys import maxint
+
 class node:
     def __init__(self,id):
         self.id = id
@@ -45,6 +47,9 @@ class graph:
     #colors the graph only using new colors if it has to
     def smart_greedy_color(self):
         for node in self.nodes:
+            if self.nodes[node].color != None:
+                #already colored
+                continue
             color_chosen = False
             #see if we can use any of our current colors
             for color in self.colors:
@@ -100,7 +105,30 @@ class graph:
         else:
             self.color_distribution[color] = 1
 
-    def remove_color(self,color):
+    def get_most_used_color(self):
+        most_used_count = 0
+        most_used = None
+        for color in self.colors:
+            if self.color_distribution[color] > most_used_count:
+                most_used = color
+                most_used_count = self.color_distribution[color]
+        return most_used
+
+    # returns a list of node ids ordered by color distribution (most-used to least used)
+    #def get_nodes_color_distribution_order(self):
+
+
+
+    def get_least_used_color(self):
+        least_used_count = maxint
+        least_used = None
+        for color in self.colors:
+            if self.color_distribution[color] < least_used_count:
+                least_used = color
+                least_used_count = self.color_distribution[color]
+        return least_used
+
+    def remove_color(self,color,new_color):
         if len(self.colors) > 1:
             #clean up memory
             self.colors.remove(color)
@@ -108,8 +136,11 @@ class graph:
             # reassign color for nodes with the removed color
             for node in self.nodes:
                 if self.nodes[node].color == color:
-                    #assign the next color in the list
-                    self.color_node(node,self.colors[-1])
+                    self.color_node(node,new_color)
+
+    def remove_all_colors(self, new_color):
+        for color in self.colors:
+            self.remove_color(color, None)
 
     def show(self):
         for key, value in self.nodes.items():

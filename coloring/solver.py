@@ -2,6 +2,41 @@
 # -*- coding: utf-8 -*-
 from graph import graph
 
+debug = False
+
+def local_search_1(my_graph):
+    continue_search = True
+
+    #now remove colors and use local search to remove violations
+    while continue_search:
+        #remove a color
+        my_graph.remove_color(my_graph.colors[-1])
+        violations_after_color_removal = my_graph.get_num_violations()
+        print "violations_after_color_removal: " + str(violations_after_color_removal)
+
+        #if somehow removing the color resulted in no violations, skip right to removing another
+        if violations_after_color_removal == 0:
+            continue
+
+        #iterate local search until we remove violations
+        tries_left = 10
+        while tries_left > 0:
+            violations_before_search = my_graph.get_num_violations()
+            print "violations_before_search: " + str(violations_before_search)
+            violations = my_graph.get_violations()
+            print "violating edges: " + str(violations)
+            local_search_moves = my_graph.search_neigborhood(violations[0])
+            print "local search moves: " + str(local_search_moves)
+            violations_after_search = my_graph.get_num_violations()
+            print "violations_after_search: " + str(violations_after_search)
+            if violations_after_search == 0:
+                break
+            else:
+                tries_left -= 1
+
+        if tries_left == 0:
+            continue_search = False
+
 def solve_it(input_data):
     # Modify this code to run your optimization algorithm
 
@@ -20,10 +55,26 @@ def solve_it(input_data):
 
     my_graph = graph(node_count,edges)
 
-    print my_graph.is_feasible()
+    #use a greedy coloring to get our initial configuration
+    if debug: print "violations: " + str(my_graph.get_num_violations())
     my_graph.smart_greedy_color()
-    print my_graph.is_feasible()
-    print "colors used: " + str(len(my_graph.colors))
+    if debug: print "violations: " + str(my_graph.get_num_violations())
+    if debug: print "colors used: " + str(len(my_graph.colors))
+
+    violations = my_graph.get_num_violations()
+
+    max_iterations = 10000
+    iteration_count = 0
+    while violations == 0 and iteration_count < max_iterations:
+        if debug: my_graph.show_color_distribution()
+        if debug: print "most_used_color: " + str(my_graph.get_most_used_color())
+        #local_search_1(my_graph)
+        my_graph.remove_color(my_graph.get_most_used_color(),None)
+        my_graph.smart_greedy_color()
+        violations = my_graph.get_num_violations()
+        if debug: print "violations: " + str(violations)
+        if debug: print "colors used: " + str(len(my_graph.colors))
+        iteration_count += 1
 
     # build a trivial solution
     # every node has its own color
