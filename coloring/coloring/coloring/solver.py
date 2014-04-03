@@ -57,6 +57,7 @@ def iterated_greedy_1(my_graph, max_iterations):
         iteration_count += 1
 
 # each iteration: re-orders nodes starting with most-used colors, and re-colors the whole graph using greed coloring
+#@profile
 def iterated_greedy_2(my_graph, max_iterations):
     violations = my_graph.get_num_violations()
     iteration_count = 0
@@ -102,7 +103,7 @@ def solve_it(input_data):
     if debug: print "colors used: " + str(len(my_graph.colors))
 
     #iterated_greedy_1(my_graph, 100)
-    iterated_greedy_2(my_graph, 1000)
+    iterated_greedy_2(my_graph, 100)
 
     print "colors used: " + str(len(my_graph.colors))
 

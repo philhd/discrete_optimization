@@ -1,3 +1,5 @@
+from sys import maxint
+
 class node:
     def __init__(self,id):
         self.id = id
@@ -43,8 +45,8 @@ class graph:
         return violations
 
     #colors the graph only using new colors if it has to
-    def smart_greedy_color(self):
-        for node in self.nodes:
+    def smart_greedy_color(self,ordered_node_list):
+        for node in ordered_node_list:
             if self.nodes[node].color != None:
                 #already colored
                 continue
@@ -93,24 +95,43 @@ class graph:
         return moves_made
 
     def color_node(self, node, color):
-        if self.nodes[node].color != None:
+        previous_color = self.nodes[node].color
+        if previous_color != None:
             #remove current color from distribution
-            if self.color_distribution.has_key(self.nodes[node].color):
-                self.color_distribution[self.nodes[node].color] -= 1
+            if self.color_distribution.has_key(previous_color):
+                self.color_distribution[previous_color].remove(previous_color)
         self.nodes[node].color = color;
-        if self.color_distribution.has_key(color):
-            self.color_distribution[color] += 1
-        else:
-            self.color_distribution[color] = 1
+        #don't include None in color distribution
+        if color != None:
+            if self.color_distribution.has_key(color):
+                self.color_distribution[color].append(node)
+            else:
+                self.color_distribution[color] = [node]
 
     def get_most_used_color(self):
         most_used_count = 0
         most_used = None
         for color in self.colors:
-            if self.color_distribution[color] > most_used_count:
+            if len(self.color_distribution[color]) > most_used_count:
                 most_used = color
-                most_used_count = self.color_distribution[color]
+                most_used_count = len(self.color_distribution[color])
         return most_used
+
+    # returns a list of node ids ordered by color distribution (most-used to least used)
+    def get_nodes_color_distribution_order(self):
+        ordered_nodes = []
+        for key, value in self.color_distribution.items():
+            ordered_nodes.extend(value)
+        return ordered_nodes
+
+    def get_least_used_color(self):
+        least_used_count = maxint
+        least_used = None
+        for color in self.colors:
+            if len(self.color_distribution[color]) < least_used_count:
+                least_used = color
+                least_used_count = len(self.color_distribution[color])
+        return least_used
 
     def remove_color(self,color,new_color):
         if len(self.colors) > 1:
@@ -121,6 +142,10 @@ class graph:
             for node in self.nodes:
                 if self.nodes[node].color == color:
                     self.color_node(node,new_color)
+
+    def remove_all_colors(self, new_color):
+        for color in self.colors:
+            self.remove_color(color, None)
 
     def show(self):
         for key, value in self.nodes.items():

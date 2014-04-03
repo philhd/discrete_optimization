@@ -13,7 +13,7 @@
     <Name>coloring</Name>
     <RootNamespace>coloring</RootNamespace>
     <LaunchProvider>Standard Python launcher</LaunchProvider>
-    <CommandLineArguments>..\..\data\gc_50_3</CommandLineArguments>
+    <CommandLineArguments>..\..\data\gc_70_7</CommandLineArguments>
     <InterpreterPath />
     <InterpreterArguments />
   </PropertyGroup>
