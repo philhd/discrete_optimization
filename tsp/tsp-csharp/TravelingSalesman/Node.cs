@@ -35,7 +35,12 @@ namespace TravelingSalesman
         /// <returns>the distance</returns>
         public static double DistanceBetween(Node n1, Node n2)
         {
-            return Math.Sqrt((n1.X - n2.X) * (n1.X - n2.X) + (n1.Y - n2.Y) * (n1.Y - n2.Y));
+            return Math.Sqrt(SquaredDistanceBetween(n1, n2));
+        }
+
+        public static double SquaredDistanceBetween(Node n1, Node n2)
+        {
+            return (n1.X - n2.X) * (n1.X - n2.X) + (n1.Y - n2.Y) * (n1.Y - n2.Y);
         }
 
         /// <summary>
@@ -46,6 +51,11 @@ namespace TravelingSalesman
         public double DistanceTo(Node other)
         {
             return DistanceBetween(this, other);
+        }
+
+        public double SquaredDistanceTo(Node other)
+        {
+            return SquaredDistanceBetween(this, other);
         }
 
         /// <summary>

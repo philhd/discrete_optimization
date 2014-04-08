@@ -30,7 +30,6 @@ namespace TravelingSalesman
 
             // use a solver to solve the problem
             var solution = Solve(parsedInput);
-
             // print the solution (in the appropriate format) to the Console
             // so that it can be submitted
             Console.Write(solution.ToString());
