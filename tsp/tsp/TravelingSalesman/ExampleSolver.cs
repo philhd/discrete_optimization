@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace TravelingSalesman
 {
@@ -9,6 +10,12 @@ namespace TravelingSalesman
     public class ExampleSolver : ISolver
     {
         #region ISolver Members
+
+        public event Action DataComplete
+        {
+            add { }
+            remove { }
+        }
 
         public ExampleSolver()
         {
@@ -25,8 +32,8 @@ namespace TravelingSalesman
                 {
                     this.Graph.Edges.Add(new Edge(this.Graph.Nodes.Last(), node));
                 }
-                this.Graph.Path.Add(node);
-                this.Graph.Nodes.Add(node);
+                //this.Graph.Path.Add(node);
+                this.Graph.AddNode(node);
             }
 
             // complete the cycle

@@ -7,6 +7,8 @@ namespace TravelingSalesman
 {
     public class TwoOptSolver : ISolver
     {
+        public event Action DataComplete;
+
         public TwoOptSolver()
         {
             this.Graph = new TspGraph();
@@ -16,22 +18,23 @@ namespace TravelingSalesman
 
         public TspGraph Solve(IEnumerable<Node> nodes)
         {
-            int numIterations = 10000;
-            var result = new TspGraph();
+            int numIterations = 1;
 
             foreach (var node in nodes)
-                result.Path.Add(node);
+                this.Graph.AddNode(node);
+
+            this.RaiseDataComplete();
 
             for (int i = 0; i < numIterations; i++)
             {
-                double prevDistance = result.GetDistance();
-                int node1 = result.getRandomNodeIndex(-1);
-                int node2 = result.getRandomNodeIndex(node1);
-                result.Swap(node1, node2);
-                double newDistance = result.GetDistance();
+                double prevDistance = this.Graph.GetDistance();
+                int node1 = this.Graph.getRandomNodeIndex(-1);
+                int node2 = this.Graph.getRandomNodeIndex(node1);
+                this.Graph.Swap(node1, node2);
+                double newDistance = this.Graph.GetDistance();
                 if (newDistance > prevDistance)
                 {
-                    result.Swap(node1, node2);
+                    this.Graph.Swap(node1, node2);
                 }
                 else
                 {
@@ -39,7 +42,15 @@ namespace TravelingSalesman
                 }
             }
 
-            return result;
+            return this.Graph;
+        }
+
+        private void RaiseDataComplete()
+        {
+            if (this.DataComplete != null)
+            {
+                this.DataComplete();
+            }
         }
     }
 }

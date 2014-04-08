@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelingSalesman;
 
 namespace TravelingSalesmanGui
 {
@@ -30,16 +31,27 @@ namespace TravelingSalesmanGui
         public void Setup()
         {
             this.TspVm = this.DataContext as TspViewModel;
+            this.SubscribeToEvents();
+        }
+
+        public void SubscribeToEvents()
+        {
+            this.TspVm.DataChanged +=new Action(this.TspVm_DataChanged);
         }
 
         public void TspVisualization_Loaded(object sender, RoutedEventArgs e)
         {
-            this.DrawEllipse(this.visualizationCanvas.ActualWidth/2, this.visualizationCanvas.ActualHeight/2);
+            //this.DrawEllipse(this.visualizationCanvas.ActualWidth/2, this.visualizationCanvas.ActualHeight/2);
+            System.Threading.Tasks.Task task = System.Threading.Tasks.Task.Factory.StartNew<TspGraph>(this.Solve);
             Loaded -= new RoutedEventHandler(this.TspVisualization_Loaded);
         }
 
         public void DrawEllipse(double x, double y, double width, double height)
         {
+            // scale position by max x and y
+            double scaledX = x / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth - (width/2);
+            double scaledY = y / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight - (height/2);
+
             Ellipse circle1 = new Ellipse();
 
             // Create a SolidColorBrush with a red color to fill the  
@@ -58,13 +70,42 @@ namespace TravelingSalesmanGui
             circle1.Height = height;
 
             this.visualizationCanvas.Children.Add(circle1);
-            Canvas.SetLeft(circle1, x);
-            Canvas.SetBottom(circle1, y);
+            Canvas.SetLeft(circle1, scaledX);
+            Canvas.SetBottom(circle1, scaledY);
+        }
+
+        public void DrawNode(Node node)
+        {
+            this.DrawEllipse(node.X, node.Y);
         }
 
         public void DrawEllipse(double x, double y)
         {
-            this.DrawEllipse(x, y, 20, 20);
+            this.DrawEllipse(x, y, 10, 10);
+        }
+
+        private void TspVm_DataChanged()
+        {
+            this.Render();
+        }
+
+        private void Render()
+        {
+            visualizationCanvas.Children.Clear();
+            foreach (Node node in this.TspVm.Nodes)
+            {
+                this.DrawNode(node);
+            }
+        }
+
+        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.Render();
+        }
+
+        private TspGraph Solve()
+        {
+            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_33810_1"));
         }
     }
 }

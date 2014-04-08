@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Canvas HorizontalAlignment="Stretch" Name="visualizationCanvas" VerticalAlignment="Stretch">
+        <Canvas SizeChanged="Canvas_SizeChanged" Margin="50" HorizontalAlignment="Stretch" Name="visualizationCanvas" VerticalAlignment="Stretch">
         </Canvas>
     </Grid>
 </UserControl>
