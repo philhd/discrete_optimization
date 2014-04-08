@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelingSalesman", "TravelingSalesman.csproj", "{B6B9EA0F-9423-48C1-A496-0E8F496B00F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TravelingSalesmanGui", "..\TravelingSalesmanGui\TravelingSalesmanGui.csproj", "{15E2CFF1-1F01-428E-9C81-45B8CF1BEF8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +15,10 @@ Global
 		{B6B9EA0F-9423-48C1-A496-0E8F496B00F5}.Debug|x86.Build.0 = Debug|x86
 		{B6B9EA0F-9423-48C1-A496-0E8F496B00F5}.Release|x86.ActiveCfg = Release|x86
 		{B6B9EA0F-9423-48C1-A496-0E8F496B00F5}.Release|x86.Build.0 = Release|x86
+		{15E2CFF1-1F01-428E-9C81-45B8CF1BEF8B}.Debug|x86.ActiveCfg = Debug|x86
+		{15E2CFF1-1F01-428E-9C81-45B8CF1BEF8B}.Debug|x86.Build.0 = Debug|x86
+		{15E2CFF1-1F01-428E-9C81-45B8CF1BEF8B}.Release|x86.ActiveCfg = Release|x86
+		{15E2CFF1-1F01-428E-9C81-45B8CF1BEF8B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

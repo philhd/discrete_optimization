@@ -1,0 +1,16 @@
+﻿<Window x:Class="TravelingSalesmanGui.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TSP visualization" Height="350" Width="525">
+    <Grid>
+        <TabControl  HorizontalAlignment="Stretch" Name="visualizationControl" VerticalAlignment="Stretch">
+            <TabItem Header="visualization" Name="visualization">
+                <Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="console" Name="console">
+                <Grid />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
