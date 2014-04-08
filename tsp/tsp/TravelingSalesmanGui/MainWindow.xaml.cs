@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TravelingSalesman;
 
 namespace TravelingSalesmanGui
 {
@@ -23,7 +24,10 @@ namespace TravelingSalesmanGui
         {
             InitializeComponent();
 
+            TspViewModel tspVm = new TspViewModel(new TwoOptSolver(), this.Dispatcher);
             TspVisualization tspView = new TspVisualization();
+            tspView.DataContext = tspVm;
+            tspView.Setup();
             visualization.Content = tspView;
         }
     }

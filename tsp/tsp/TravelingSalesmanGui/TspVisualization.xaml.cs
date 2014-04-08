@@ -19,17 +19,23 @@ namespace TravelingSalesmanGui
     /// </summary>
     public partial class TspVisualization : UserControl
     {
-        //private Canvas visualizationCanvas;
-
         public TspVisualization()
         {
             this.InitializeComponent();
             Loaded += new RoutedEventHandler(this.TspVisualization_Loaded);
         }
 
+        public TspViewModel TspVm { get; private set; }
+
+        public void Setup()
+        {
+            this.TspVm = this.DataContext as TspViewModel;
+        }
+
         public void TspVisualization_Loaded(object sender, RoutedEventArgs e)
         {
             this.DrawEllipse(this.visualizationCanvas.ActualWidth/2, this.visualizationCanvas.ActualHeight/2);
+            Loaded -= new RoutedEventHandler(this.TspVisualization_Loaded);
         }
 
         public void DrawEllipse(double x, double y, double width, double height)

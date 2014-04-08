@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TspViewModel.cs" />
     <Compile Include="TspVisualization.xaml.cs">
       <DependentUpon>TspVisualization.xaml</DependentUpon>
     </Compile>
@@ -98,6 +99,12 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TravelingSalesman\TravelingSalesman.csproj">
+      <Project>{B6B9EA0F-9423-48C1-A496-0E8F496B00F5}</Project>
+      <Name>TravelingSalesman</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

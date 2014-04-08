@@ -9,7 +9,9 @@
                 </Grid>
             </TabItem>
             <TabItem Header="console" Name="console">
-                <Grid />
+                <Grid>
+                    <ScrollViewer HorizontalAlignment="Stretch" Name="outputConsole" VerticalAlignment="Stretch" />
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

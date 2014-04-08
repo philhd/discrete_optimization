@@ -10,25 +10,29 @@ namespace TravelingSalesman
     {
         #region ISolver Members
 
-        public SolutionResult Solve(IEnumerable<Node> nodes)
+        public ExampleSolver()
         {
-            var result = new SolutionResult();
+            this.Graph = new TspGraph();
+        }
 
+        public TspGraph Graph { get; private set; }
+
+        public TspGraph Solve(IEnumerable<Node> nodes)
+        {
             foreach (var node in nodes)
             {
-                if(result.Path.Count > 0)
+                if (this.Graph.Path.Count > 0)
                 {
-                    result.Edges.Add(new Edge(result.Nodes.Last(),node));
+                    this.Graph.Edges.Add(new Edge(this.Graph.Nodes.Last(), node));
                 }
-                result.Path.Add(node);
-                result.Nodes.Add(node);
-
+                this.Graph.Path.Add(node);
+                this.Graph.Nodes.Add(node);
             }
 
             // complete the cycle
-            result.Edges.Add(new Edge(result.Nodes.Last(), result.Nodes.First()));
+            this.Graph.Edges.Add(new Edge(this.Graph.Nodes.Last(), this.Graph.Nodes.First()));
 
-            return result;
+            return this.Graph;
         }
 
         #endregion

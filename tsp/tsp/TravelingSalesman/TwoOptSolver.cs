@@ -5,12 +5,19 @@ using System.Text;
 
 namespace TravelingSalesman
 {
-    class TwoOptSolver : ISolver
+    public class TwoOptSolver : ISolver
     {
-        public SolutionResult Solve(IEnumerable<Node> nodes)
+        public TwoOptSolver()
+        {
+            this.Graph = new TspGraph();
+        }
+
+        public TspGraph Graph { get; private set; }
+
+        public TspGraph Solve(IEnumerable<Node> nodes)
         {
             int numIterations = 10000;
-            var result = new SolutionResult();
+            var result = new TspGraph();
 
             foreach (var node in nodes)
                 result.Path.Add(node);
