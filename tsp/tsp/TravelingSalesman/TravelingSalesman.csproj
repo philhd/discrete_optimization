@@ -46,6 +46,7 @@
     <Compile Include="TspGraph.cs" />
     <Compile Include="ExampleSolver.cs" />
     <Compile Include="Node.cs" />
+    <Compile Include="TwoOptSolverEdges.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

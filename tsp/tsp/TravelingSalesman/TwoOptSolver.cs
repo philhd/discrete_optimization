@@ -18,8 +18,9 @@ namespace TravelingSalesman
 
         public TspGraph Solve(IEnumerable<Node> nodes)
         {
-            int numIterations = 1;
+            int numIterations = 100000;
 
+            // initial tour is completely greedy
             foreach (var node in nodes)
                 this.Graph.AddNode(node);
 

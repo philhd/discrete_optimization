@@ -24,7 +24,7 @@ namespace TravelingSalesmanGui
         {
             InitializeComponent();
 
-            TspViewModel tspVm = new TspViewModel(new TwoOptSolver(), this.Dispatcher);
+            TspViewModel tspVm = new TspViewModel(new TwoOptSolverEdges(), this.Dispatcher);
             TspVisualization tspView = new TspVisualization();
             tspView.DataContext = tspVm;
             tspView.Setup();

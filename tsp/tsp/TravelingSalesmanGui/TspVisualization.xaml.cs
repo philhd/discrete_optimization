@@ -49,8 +49,8 @@ namespace TravelingSalesmanGui
         public void DrawEllipse(double x, double y, double width, double height)
         {
             // scale position by max x and y
-            double scaledX = x / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth - (width/2);
-            double scaledY = y / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight - (height/2);
+            double scaledX = x / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth;
+            double scaledY = y / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
 
             Ellipse circle1 = new Ellipse();
 
@@ -72,6 +72,31 @@ namespace TravelingSalesmanGui
             this.visualizationCanvas.Children.Add(circle1);
             Canvas.SetLeft(circle1, scaledX);
             Canvas.SetBottom(circle1, scaledY);
+        }
+
+        public void DrawLine(double x1, double x2, double y1, double y2)
+        {
+            // scale positions by max x and y
+            double scaledX1 = x1 / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth;
+            double scaledX2 = x2 / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth;
+            double scaledY1 = y1 / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
+            double scaledY2 = y2 / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
+
+            Line myLine = new Line();
+            myLine.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
+            myLine.X1 = scaledX1;
+            myLine.X2 = scaledX2;
+            myLine.Y1 = scaledY1;
+            myLine.Y2 = scaledY2;
+            myLine.HorizontalAlignment = HorizontalAlignment.Left;
+            myLine.VerticalAlignment = VerticalAlignment.Center;
+            myLine.StrokeThickness = 2;
+            this.visualizationCanvas.Children.Add(myLine);
+        }
+
+        public void DrawEdge(Edge edge)
+        {
+            this.DrawLine(edge.Start.X, edge.End.X, edge.Start.Y, edge.End.Y);
         }
 
         public void DrawNode(Node node)
@@ -96,6 +121,10 @@ namespace TravelingSalesmanGui
             {
                 this.DrawNode(node);
             }
+            foreach (Edge edge in this.TspVm.Edges)
+            {
+                this.DrawEdge(edge);
+            }
         }
 
         private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -105,7 +134,7 @@ namespace TravelingSalesmanGui
 
         private TspGraph Solve()
         {
-            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_33810_1"));
+            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_51_1"));
         }
     }
 }

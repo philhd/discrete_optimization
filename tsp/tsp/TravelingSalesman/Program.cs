@@ -12,9 +12,10 @@ namespace TravelingSalesman
         public static TspGraph Solve(IEnumerable<Node> input)
         {
             // todo: replace the right-hand side with the ISolver you've implemented
-            ISolver solver = new ExampleSolver();
-            ISolver twoOptSolver = new TwoOptSolver();
-            return twoOptSolver.Solve(input);
+            //ISolver solver = new ExampleSolver();
+            //ISolver twoOptSolver = new TwoOptSolver();
+            ISolver twoOptEdgeSolver = new TwoOptSolverEdges();
+            return twoOptEdgeSolver.Solve(input);
         }
 
         /// <summary>
@@ -32,7 +33,7 @@ namespace TravelingSalesman
             //Console.WriteLine(string.Format("Distance: {0}", solution.GetDistance()));
             // print the solution (in the appropriate format) to the Console
             // so that it can be submitted
-            Console.Write(solution.ToString());
+            Console.Write(solution.ToStringEdges());
         }
     }
 }

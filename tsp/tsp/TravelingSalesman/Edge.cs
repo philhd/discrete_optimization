@@ -9,20 +9,33 @@ namespace TravelingSalesman
     {
         public Edge(Node startNode, Node endNode)
         {
-            this.StartNode = startNode;
-            this.EndNode = endNode;
-            this.Length = startNode.DistanceTo(this.EndNode);
+            this.Start = startNode;
+            this.End = endNode;
+            this.Length = this.Start.DistanceTo(this.End);
         }
 
-        public Node StartNode { get; set; }
+        public Node Start { get; set; }
 
-        public Node EndNode { get; set; }
+        public Node End { get; set; }
 
         public double Length { get; set; }
 
+        // swap the start and end nodes of the edge
+        public void ReverseDirection()
+        {
+            Node temp = this.Start;
+            this.Start = this.End;
+            this.End = temp;
+        }
+
+        public void RecalcLength()
+        {
+            this.Length = this.Start.DistanceTo(this.End);
+        }
+
         public override string ToString()
         {
-            return string.Format("{0} -> {1} : {2}", this.StartNode, this.EndNode, this.Length);
+            return string.Format("{0} -> {1} : {2}", this.Start, this.End, this.Length);
         }
     }
 }
