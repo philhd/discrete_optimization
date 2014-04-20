@@ -157,7 +157,7 @@ namespace TravelingSalesmanGui
 
         private void TspVm_EdgeUpdated(Edge edge)
         {
-            this.TspVm.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate() { this.ModifyEdge(this.TspVm.EdgeLineMap[edge], edge); }));
+            this.TspVm.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate() { if (this.TspVm.EdgeLineMap.ContainsKey(edge)) { this.ModifyEdge(this.TspVm.EdgeLineMap[edge], edge); } }));
         }
 
         private void Render()
@@ -186,7 +186,7 @@ namespace TravelingSalesmanGui
 
         private TspGraph Solve()
         {
-            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_51_1"));
+            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_574_1"));
         }
 
         //private void ModifyEdge(Line prevEdge, Edge newEdge)
