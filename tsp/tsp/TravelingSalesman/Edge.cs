@@ -7,12 +7,17 @@ namespace TravelingSalesman
 {
     public class Edge
     {
+        private static int NextId = 0;
+
         public Edge(Node startNode, Node endNode)
         {
             this.Start = startNode;
             this.End = endNode;
             this.Length = this.Start.DistanceTo(this.End);
+            this.Id = GetNextId();
         }
+
+        public int Id { get; set; }
 
         public Node Start { get; set; }
 
@@ -36,6 +41,11 @@ namespace TravelingSalesman
         public override string ToString()
         {
             return string.Format("{0} -> {1} : {2}", this.Start, this.End, this.Length);
+        }
+
+        private static int GetNextId()
+        {
+            return System.Threading.Interlocked.Increment(ref NextId);
         }
     }
 }

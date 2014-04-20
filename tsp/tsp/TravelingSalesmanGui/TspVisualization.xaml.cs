@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TravelingSalesman;
+using System.Windows.Threading;
 
 namespace TravelingSalesmanGui
 {
@@ -36,7 +37,8 @@ namespace TravelingSalesmanGui
 
         public void SubscribeToEvents()
         {
-            this.TspVm.DataChanged +=new Action(this.TspVm_DataChanged);
+            this.TspVm.DataChanged += new Action(this.TspVm_DataChanged);
+            this.TspVm.EdgeUpdated += new Action<Edge>(this.TspVm_EdgeUpdated);
         }
 
         public void TspVisualization_Loaded(object sender, RoutedEventArgs e)
@@ -74,7 +76,19 @@ namespace TravelingSalesmanGui
             Canvas.SetBottom(circle1, scaledY);
         }
 
-        public void DrawLine(double x1, double x2, double y1, double y2)
+        public Line DrawLine(double x1, double x2, double y1, double y2)
+        {
+            Line myLine = this.GetScaledLine(x1, x2, y1, y2);
+            this.visualizationCanvas.Children.Add(myLine);
+            return myLine;
+        }
+
+        private Tuple<double, double, double, double> GetScaledLineCoords(Edge edge)
+        {
+            return this.GetScaledLineCoords(edge.Start.X, edge.End.X, edge.Start.Y, edge.End.Y);
+        }
+
+        private Tuple<double, double, double, double> GetScaledLineCoords(double x1, double x2, double y1, double y2)
         {
             // scale positions by max x and y
             double scaledX1 = x1 / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth;
@@ -82,21 +96,48 @@ namespace TravelingSalesmanGui
             double scaledY1 = y1 / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
             double scaledY2 = y2 / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
 
+            double transformedY1 = this.visualizationCanvas.ActualHeight - scaledY1;
+            double transformedY2 = this.visualizationCanvas.ActualHeight - scaledY2;
+
+            return new Tuple<double, double, double, double>(scaledX1, scaledX2, transformedY1, transformedY2);
+        }
+
+        private Line GetScaledLine(double x1, double x2, double y1, double y2)
+        {
+            // scale positions by max x and y
+            double scaledX1 = x1 / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth;
+            double scaledX2 = x2 / this.TspVm.Max_x * this.visualizationCanvas.ActualWidth;
+            double scaledY1 = y1 / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
+            double scaledY2 = y2 / this.TspVm.Max_y * this.visualizationCanvas.ActualHeight;
+
+            double transformedY1 = this.visualizationCanvas.ActualHeight - scaledY1;
+            double transformedY2 = this.visualizationCanvas.ActualHeight - scaledY2;
+
             Line myLine = new Line();
             myLine.Stroke = System.Windows.Media.Brushes.LightSteelBlue;
             myLine.X1 = scaledX1;
             myLine.X2 = scaledX2;
-            myLine.Y1 = scaledY1;
-            myLine.Y2 = scaledY2;
+            myLine.Y1 = transformedY1;
+            myLine.Y2 = transformedY2;
             myLine.HorizontalAlignment = HorizontalAlignment.Left;
             myLine.VerticalAlignment = VerticalAlignment.Center;
             myLine.StrokeThickness = 2;
-            this.visualizationCanvas.Children.Add(myLine);
+
+            return myLine;
         }
 
-        public void DrawEdge(Edge edge)
+        private void ModifyEdge(Line line, Edge edge)
         {
-            this.DrawLine(edge.Start.X, edge.End.X, edge.Start.Y, edge.End.Y);
+            Tuple<double, double, double, double> newLineCoords = this.GetScaledLineCoords(edge);
+            line.X1 = newLineCoords.Item1;
+            line.X2 = newLineCoords.Item2;
+            line.Y1 = newLineCoords.Item3;
+            line.Y2 = newLineCoords.Item4;
+        }
+
+        public Line DrawEdge(Edge edge)
+        {
+            return this.DrawLine(edge.Start.X, edge.End.X, edge.Start.Y, edge.End.Y);
         }
 
         public void DrawNode(Node node)
@@ -114,16 +155,27 @@ namespace TravelingSalesmanGui
             this.Render();
         }
 
+        private void TspVm_EdgeUpdated(Edge edge)
+        {
+            this.TspVm.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate() { this.ModifyEdge(this.TspVm.EdgeLineMap[edge], edge); }));
+        }
+
         private void Render()
         {
+            bool test = true;
             visualizationCanvas.Children.Clear();
             foreach (Node node in this.TspVm.Nodes)
             {
                 this.DrawNode(node);
             }
-            foreach (Edge edge in this.TspVm.Edges)
+            foreach (Edge edge in this.TspVm.Edges.Values)
             {
-                this.DrawEdge(edge);
+                Line drawnEdge = this.DrawEdge(edge);
+                this.TspVm.EdgeLineMap[edge] = drawnEdge;
+                //if(test)
+                //{
+                //    this.TspVm.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate() { this.ModifyEdge(drawnEdge); }));
+                //}
             }
         }
 
@@ -136,5 +188,11 @@ namespace TravelingSalesmanGui
         {
             return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_51_1"));
         }
+
+        //private void ModifyEdge(Line prevEdge, Edge newEdge)
+        //{
+        //    this.visualizationCanvas.Children.Remove(prevEdge);
+        //    this.DrawEdge(newEdge);      
+        //}
     }
 }
