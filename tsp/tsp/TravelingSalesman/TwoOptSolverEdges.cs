@@ -5,18 +5,15 @@ using System.Text;
 
 namespace TravelingSalesman
 {
-    public class TwoOptSolverEdges : ISolver
+    public class TwoOptSolverEdges : SolverBase
     {
-        public event Action DataComplete;
-
-        public TspGraph Graph { get; private set; }
-
         public TwoOptSolverEdges()
         {
             this.Graph = new TspGraph();
+            this.MoveDecider = new MoveDeciderBasic();
         }
 
-        public TspGraph Solve(IEnumerable<Node> nodes)
+        public override TspGraph Solve(IEnumerable<Node> nodes)
         {
             int numIterations = 10000;
 
@@ -55,25 +52,18 @@ namespace TravelingSalesman
                 int node2 = this.Graph.getRandomNodeIndex(node1);
                 this.Graph.SwapEdges(node1, node2);
                 double newDistance = this.Graph.GetDistanceEdges();
-                if (newDistance > prevDistance)
+                if (!this.MoveDecider.ShouldMakeMove(prevDistance, newDistance))
                 {
                     this.Graph.SwapEdges(node1, node2);
                 }
                 else
                 {
+                    this.Graph.Distance = newDistance;
                     //Console.WriteLine(string.Format("swapped {0} with {1}. distance {2} -> {3}", node1, node2, prevDistance, newDistance));
                     //Console.WriteLine(this.Graph.ShowEdges());
                 }
 
                 System.Threading.Thread.Sleep(1);
-            }
-        }
-
-        private void RaiseDataComplete()
-        {
-            if (this.DataComplete != null)
-            {
-                this.DataComplete();
             }
         }
     }

@@ -6,7 +6,22 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Canvas SizeChanged="Canvas_SizeChanged" Margin="50" HorizontalAlignment="Stretch" Name="visualizationCanvas" VerticalAlignment="Stretch">
-        </Canvas>
+        <Canvas Grid.RowSpan="1" Grid.Row="1" SizeChanged="Canvas_SizeChanged" Margin="50" HorizontalAlignment="Stretch" Name="visualizationCanvas" VerticalAlignment="Stretch" />
+        <!--<Expander VerticalAlignment="Bottom">-->
+            <Grid VerticalAlignment="Bottom">
+            <ScrollViewer>
+                <DataGrid Name="graphDataGrid" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <!--<StatusBar>
+                    <Label Content="Tour Distance="></Label>
+                    <Label Name="distanceValue" ></Label>
+                    <Label Content="Temperature="></Label>
+                </StatusBar>-->
+            </ScrollViewer>
+        </Grid>
+        <!--</Expander>-->
     </Grid>
 </UserControl>

@@ -24,10 +24,14 @@ namespace TravelingSalesmanGui
             this.EdgeLineMap = new Dictionary<Edge, Line>();
             this.dispatcher = dispatcher;
             this.Solver = solver;
+            this.Graphs = new ObservableCollection<TspGraph>();
+            this.Graphs.Add(this.Solver.Graph);
             this.SubscribeToEvents();
         }
 
         public ISolver Solver { get; private set; }
+
+        public ObservableCollection<TspGraph> Graphs { get; set; }
 
         public ObservableCollection<Node> Nodes { get; set; }
 
@@ -52,7 +56,6 @@ namespace TravelingSalesmanGui
             this.Solver.Graph.NodeAdded += new Action<Node>(this.Graph_NodeAdded);
             this.Solver.Graph.EdgeUpdated += new Action<Edge>(this.Graph_EdgeUpdated);
             this.Solver.DataComplete += new Action(this.Graph_DataComplete);
-            this.Solver.Graph.RenderNeeded += new Action(this.Graph_DataComplete);
         }
 
         private void Graph_NodeAdded(Node node)
@@ -66,6 +69,11 @@ namespace TravelingSalesmanGui
         }
 
         private void Graph_DataComplete()
+        {
+            this.dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.RaiseDataChanged));
+        }
+
+        private void Graph_DistanceChanged(double newDistance)
         {
             this.dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(this.RaiseDataChanged));
         }

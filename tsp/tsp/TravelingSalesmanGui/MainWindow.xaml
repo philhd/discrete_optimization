@@ -6,6 +6,8 @@
         <TabControl  HorizontalAlignment="Stretch" Name="visualizationControl" VerticalAlignment="Stretch">
             <TabItem Header="visualization" Name="visualization">
                 <Grid>
+                    <GridSplitter />
+                    <DataGrid AutoGenerateColumns="False" HorizontalAlignment="Right" Name="dataGrid1" VerticalAlignment="Stretch" Width="200" />
                 </Grid>
             </TabItem>
             <TabItem Header="console" Name="console">

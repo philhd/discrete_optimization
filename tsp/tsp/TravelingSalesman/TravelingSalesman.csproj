@@ -38,7 +38,10 @@
   <ItemGroup>
     <Compile Include="Edge.cs" />
     <Compile Include="IDrawable.cs" />
+    <Compile Include="IMoveDecider.cs" />
     <Compile Include="InputParser.cs" />
+    <Compile Include="MoveDeciderBasic.cs" />
+    <Compile Include="SolverBase.cs" />
     <Compile Include="TwoOptSolver.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

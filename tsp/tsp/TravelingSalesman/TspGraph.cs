@@ -3,30 +3,47 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System;
+using System.ComponentModel;
 
 namespace TravelingSalesman
 {
     /// <summary>
-    ///   A solution result for the tsp problem
+    ///   A graph representing a Traveling Salesman Problem
     /// </summary>
-    public class TspGraph
+    public class TspGraph : INotifyPropertyChanged
     {
         private readonly List<Node> path = new List<Node>();
 
         private Random rand = new Random(5);
 
+        private double distance;
+
+        /// <summary>
+        /// Event for INotifyPropertyChanged
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public event Action<Node> NodeAdded;
 
         public event Action<Edge> EdgeUpdated;
-
-        public event Action RenderNeeded;
-
-        public event Action<string> outputAdded;
 
         public TspGraph()
         {
             this.Edges = new List<Edge>();
             this.Nodes = new List<Node>();
+        }
+
+        public double Distance
+        {
+            get
+            {
+                return this.distance;
+            }
+            set
+            {
+                this.distance = value;
+                this.NotifyPropertyChanged("Distance");
+            }
         }
 
         /// <summary>
@@ -200,11 +217,15 @@ namespace TravelingSalesman
             }
         }
 
-        private void RaiseRenderNeeded()
+        /// <summary>
+        /// Property change event for INotifyPropertyChanged
+        /// </summary>
+        /// <param name="info">Name of property that has changed</param>
+        private void NotifyPropertyChanged(string propertyName)
         {
-            if (this.RenderNeeded != null)
+            if (this.PropertyChanged != null)
             {
-                this.RenderNeeded();
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }

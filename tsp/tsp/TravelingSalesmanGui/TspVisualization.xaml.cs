@@ -33,6 +33,7 @@ namespace TravelingSalesmanGui
         {
             this.TspVm = this.DataContext as TspViewModel;
             this.SubscribeToEvents();
+            this.graphDataGrid.ItemsSource = this.TspVm.Graphs;
         }
 
         public void SubscribeToEvents()
@@ -162,7 +163,6 @@ namespace TravelingSalesmanGui
 
         private void Render()
         {
-            bool test = true;
             visualizationCanvas.Children.Clear();
             foreach (Node node in this.TspVm.Nodes)
             {
@@ -172,10 +172,6 @@ namespace TravelingSalesmanGui
             {
                 Line drawnEdge = this.DrawEdge(edge);
                 this.TspVm.EdgeLineMap[edge] = drawnEdge;
-                //if(test)
-                //{
-                //    this.TspVm.Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(delegate() { this.ModifyEdge(drawnEdge); }));
-                //}
             }
         }
 
@@ -186,13 +182,7 @@ namespace TravelingSalesmanGui
 
         private TspGraph Solve()
         {
-            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_574_1"));
+            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_51_1"));
         }
-
-        //private void ModifyEdge(Line prevEdge, Edge newEdge)
-        //{
-        //    this.visualizationCanvas.Children.Remove(prevEdge);
-        //    this.DrawEdge(newEdge);      
-        //}
     }
 }
