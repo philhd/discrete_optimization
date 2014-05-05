@@ -36,11 +36,16 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoolerConstant.cs" />
+    <Compile Include="CoolerLinear.cs" />
     <Compile Include="Edge.cs" />
+    <Compile Include="ICooler.cs" />
     <Compile Include="IDrawable.cs" />
     <Compile Include="IMoveDecider.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="MoveDeciderBasic.cs" />
+    <Compile Include="MoveDeciderSA.cs" />
+    <Compile Include="SimulatedAnnealer.cs" />
     <Compile Include="SolverBase.cs" />
     <Compile Include="TwoOptSolver.cs" />
     <Compile Include="Program.cs" />

@@ -10,7 +10,7 @@ namespace TravelingSalesman
         public TwoOptSolverEdges()
         {
             this.Graph = new TspGraph();
-            this.MoveDecider = new MoveDeciderBasic();
+            this.MoveDecider = new MoveDeciderSA();
         }
 
         public override TspGraph Solve(IEnumerable<Node> nodes)
