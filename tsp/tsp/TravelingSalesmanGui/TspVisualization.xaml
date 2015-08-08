@@ -10,16 +10,18 @@
         <!--<Expander VerticalAlignment="Bottom">-->
             <Grid VerticalAlignment="Bottom">
             <ScrollViewer>
-                <DataGrid Name="graphDataGrid" AutoGenerateColumns="False">
+                
+                <!--<DataGrid Name="graphDataGrid" AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" />
                     </DataGrid.Columns>
-                </DataGrid>
+                </DataGrid>-->
                 <!--<StatusBar>
                     <Label Content="Tour Distance="></Label>
                     <Label Name="distanceValue" ></Label>
                     <Label Content="Temperature="></Label>
                 </StatusBar>-->
+                <TextBox Height="23" Text="{Binding Path=SolverInfo}" Name="solverDisplay" Width="120" />
             </ScrollViewer>
         </Grid>
         <!--</Expander>-->

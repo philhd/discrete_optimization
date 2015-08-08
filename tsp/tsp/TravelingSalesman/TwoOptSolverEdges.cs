@@ -43,6 +43,14 @@ namespace TravelingSalesman
             return this.Graph;
         }
 
+        public override string SolverInfo
+        {
+            get
+            {
+                return string.Format("{0} Distance={1} ", base.SolverInfo, this.Graph.Distance);
+            }
+        }
+
         private void LocalSearch(int numIterations)
         {
             for (int i = 0; i < numIterations; i++)

@@ -33,7 +33,8 @@ namespace TravelingSalesmanGui
         {
             this.TspVm = this.DataContext as TspViewModel;
             this.SubscribeToEvents();
-            this.graphDataGrid.ItemsSource = this.TspVm.Graphs;
+            //this.graphDataGrid.ItemsSource = this.TspVm.Graphs;
+            //this.solverDisplay.Text = this.TspVm.Solver.SolverInfo;
         }
 
         public void SubscribeToEvents()
@@ -73,8 +74,8 @@ namespace TravelingSalesmanGui
             circle1.Height = height;
 
             this.visualizationCanvas.Children.Add(circle1);
-            Canvas.SetLeft(circle1, scaledX);
-            Canvas.SetBottom(circle1, scaledY);
+            Canvas.SetLeft(circle1, scaledX - (width/2));
+            Canvas.SetBottom(circle1, scaledY - (height/2));
         }
 
         public Line DrawLine(double x1, double x2, double y1, double y2)
@@ -182,7 +183,7 @@ namespace TravelingSalesmanGui
 
         private TspGraph Solve()
         {
-            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_51_1"));
+            return this.TspVm.Solver.Solve(InputParser.ParseInput(@"..\..\..\data\tsp_28_1"));
         }
     }
 }

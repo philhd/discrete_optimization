@@ -7,24 +7,16 @@ namespace TravelingSalesman
     /// <summary>
     ///   A simple example solver (the same as the one which comes with the assignment)
     /// </summary>
-    public class ExampleSolver : ISolver
+    public class ExampleSolver : SolverBase
     {
         #region ISolver Members
-
-        public event Action DataComplete
-        {
-            add { }
-            remove { }
-        }
 
         public ExampleSolver()
         {
             this.Graph = new TspGraph();
         }
 
-        public TspGraph Graph { get; private set; }
-
-        public TspGraph Solve(IEnumerable<Node> nodes)
+        public override TspGraph Solve(IEnumerable<Node> nodes)
         {
             foreach (var node in nodes)
             {
@@ -43,5 +35,10 @@ namespace TravelingSalesman
         }
 
         #endregion
+
+        public string SolverInfo
+        {
+            get { throw new NotImplementedException(); }
+        }
     }
 }
